@@ -44,6 +44,18 @@
             text-align: center;
             margin: 10px 0;
         }
+        .back-link {
+            text-align: left; /* 左寄せ */
+            margin: 10px;
+        }
+        .back-link a {
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 16px;
+        }
+        .back-link a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -65,7 +77,12 @@
         <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
     </div>
 
+    <div class="back-link">
+        <a href="index.html">indexに戻る</a>
+    </div>
+
     <py-script>
+        from pyscript import Element
         import random
 
         def extract_random_lines(event):
