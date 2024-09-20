@@ -17,12 +17,12 @@
         }
         textarea {
             width: 40%;
-            height: 90%;
+            height: 80%;
             margin: 10px 2.5%;
             resize: none;
         }
         input[type="number"] {
-            width: 50px; 
+            width: 50px; /* 幅を元に戻す */
             margin-left: 5px;
         }
         .controls {
@@ -77,6 +77,11 @@
         <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
     </div>
 
+    <div class="button-container">
+        <button id="clearInputButton">入力欄クリア</button>
+        <button id="clearOutputButton">出力欄クリア</button>
+    </div>
+
     <div class="back-link">
         <a href="index.html">indexに戻る</a>
     </div>
@@ -104,6 +109,16 @@
             Element("outputText").element.value = "\n".join(output_lines)  # 出力
 
         Element("extractButton").element.onclick = extract_random_lines
+
+        # クリアボタンの機能
+        def clear_input(event):
+            Element("inputText").element.value = ""
+
+        def clear_output(event):
+            Element("outputText").element.value = ""
+
+        Element("clearInputButton").element.onclick = clear_input
+        Element("clearOutputButton").element.onclick = clear_output
 
     </py-script>
 
