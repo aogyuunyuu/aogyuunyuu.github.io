@@ -105,8 +105,7 @@
             
             line_count = min(line_count, len(unique_lines))
             
-            random.shuffle(unique_lines)
-            output_lines = unique_lines[:line_count]
+            output_lines = random.sample(unique_lines, line_count) 
             Element("outputText").element.value = "\n".join(output_lines)
 
         Element("extractButton").element.onclick = extract_random_lines
