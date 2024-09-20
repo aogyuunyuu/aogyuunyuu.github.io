@@ -40,13 +40,9 @@
         .button-container button {
             margin: 5px 0;
         }
-        .clear-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
-        .clear-buttons button {
-            margin: 0 5px;
+        .clear-button {
+            margin-top: 20px;
+            align-self: center;
         }
         .description {
             text-align: center;
@@ -64,16 +60,6 @@
         .back-link a:hover {
             text-decoration: underline;
         }
-        .input-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
-        .output-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
     </style>
 </head>
 <body>
@@ -83,24 +69,17 @@
         「コピーする」ボタンを押下すると右の欄に出力された結果をコピーできます。
     </div>
     <div class="container">
+        <textarea id="inputText" placeholder="ここにテキストを入力してください..."></textarea>
         <div class="button-container">
-            <textarea id="inputText" placeholder="ここにテキストを入力してください..."></textarea>
-            <div class="input-buttons">
-                <button id="clearInputButton">入力欄クリア</button>
+            <div class="controls">
+                <label for="lineCount">抽出する行数:</label>
+                <input type="number" id="lineCount" value="20" min="1">
             </div>
-        </div>
-        <div class="controls">
-            <label for="lineCount">抽出する行数:</label>
-            <input type="number" id="lineCount" value="20" min="1">
             <button id="extractButton">抽出する</button>
             <button id="copyButton">コピーする</button>
+            <button id="clearButton" class="clear-button">クリア</button>
         </div>
-        <div class="button-container">
-            <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
-            <div class="output-buttons">
-                <button id="clearOutputButton">出力欄クリア</button>
-            </div>
-        </div>
+        <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
     </div>
 
     <div class="back-link">
@@ -132,14 +111,11 @@
         Element("extractButton").element.onclick = extract_random_lines
 
         # クリアボタンの機能
-        def clear_input(event):
+        def clear_all(event):
             Element("inputText").element.value = ""
-
-        def clear_output(event):
             Element("outputText").element.value = ""
 
-        Element("clearInputButton").element.onclick = clear_input
-        Element("clearOutputButton").element.onclick = clear_output
+        Element("clearButton").element.onclick = clear_all
 
     </py-script>
 
