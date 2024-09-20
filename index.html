@@ -1,42 +1,53 @@
+<!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="utf-8"/>
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
-  </head>
-  <body>
-    <py-config>
-      packages = ["levenshtein-distance"]
-    </py-config>
-    <textarea rows="30" cols="30" id="text1"> </textarea>
-    <button class="py-button" type="submit" py-click="leven()">Go</button>
-    <textarea rows="30" cols="30" id="text2"> </textarea>
-    <div id="output"></div>
-      <span>
-        <button id="copy-button" onclick="copyToClipboard()" class="underline decoration-blue-500 hover:decoration-2 hover:decoration-blue-600"></button>
-      </span>
-    
-    <py-script>
-      from levenshtein_distance import Levenshtein
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Extractor</title>
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <style>
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+        input[type="number"] {
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>テキストランダム抽出器</h1>
+    <textarea id="inputText" placeholder="ここにテキストを入力してください..."></textarea>
+    <br>
+    <label for="lineCount">抽出する行数:</label>
+    <input type="number" id="lineCount" value="10" min="1">
+    <button id="extractButton">抽出する</button>
+    <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
 
-      def leven():
-          text1 = Element("text1").value
-          text2 = Element("text2").value
-          lev = Levenshtein(text1, text2)
-          display(f"レーベンシュタイン距離: {lev.distance()}", target="output", append=False)
+    <py-script>
+        from pyscript import Element
+        import random
+
+        def extract_random_lines(event):
+            input_text = Element("inputText").value
+            lines = input_text.splitlines()  # 改行で分割
+            unique_lines = list(set(lines))   # 重複を排除
+            
+            # 抽出する行数を取得
+            try:
+                line_count = int(Element("lineCount").value)
+            except ValueError:
+                line_count = 10  # デフォルトは10行
+            
+            # 行数が範囲外の場合は調整
+            line_count = min(line_count, len(unique_lines))
+            
+            random.shuffle(unique_lines)       # ランダムにシャッフル
+            output_lines = unique_lines[:line_count]   # 指定された数の行を抽出
+            Element("outputText").element.value = "\n".join(output_lines)  # 出力
+
+        Element("extractButton").element.onclick = extract_random_lines
     </py-script>
-        <script>
-      const copyToClipboard = () => {
-        const range = document.createRange();
-        range.selectNode(document.getElementById("text2"));
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-        document.execCommand("copy");
-        document.getElementById('copy-button').innerText = "Copied!";
-        setTimeout(() => {
-          document.getElementById('copy-button').innerText = "Copy to Clipboard";
-        }, 3000);
-      }
-    </script>
-  </body>
+</body>
 </html>
