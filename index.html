@@ -5,10 +5,21 @@
     <script defer src="https://pyscript.net/latest/pyscript.js"></script>
   </head>
   <body>
+    <py-config>
+      packages = ["levenshtein-distance"]
+    </py-config>
+    <input class="py-input" type="text_area" id="text1" />
+    <input class="py-input" type="text" id="text2" />
+    <button class="py-button" type="submit" py-click="leven()">Go</button>
+    <div id="output"></div>
     <py-script>
-      from datetime import datetime
-      now = datetime.now()
-      print(f"今は{now:%Y年%m月%d日 %H:%M:%S}です。")
+      from levenshtein_distance import Levenshtein
+
+      def leven():
+          text1 = Element("text1").value
+          text2 = Element("text2").value
+          lev = Levenshtein(text1, text2)
+          display(f"レーベンシュタイン距離: {lev.distance()}", target="output", append=False)
     </py-script>
   </body>
 </html>
