@@ -12,12 +12,12 @@
         }
         .container {
             display: flex;
-            height: calc(100% - 200px); /* 説明文とタイトルの高さを引く */
+            height: calc(100% - 120px); /* 説明文とタイトルの高さを引く */
             align-items: stretch;
         }
         textarea {
             width: 40%;
-            height: 95%;
+            height: 80%;
             margin: 10px 2.5%;
             resize: none;
         }
@@ -34,19 +34,11 @@
         .button-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
             margin: 0 10px;
         }
         .button-container button {
-        }
-        #extractButton, #copyButton {
-            width: 100px;
             margin: 5px 0;
-        }
-        .clear-button {
-            width: 80px; 
-            margin: 40px 0;
         }
         .description {
             text-align: center;
@@ -69,7 +61,7 @@
 <body>
     <h1 style="text-align: center;">テキストランダム抽出器</h1>
     <div class="description">
-        左側の入力欄に入力されたリストから空白行を削除して「抽出する行数」分のランダムなリストが右の欄に出力されます。<br>
+        左側の入力欄に入力されたリストから空白行を削除して「抽出する行数」分のリストが右の欄に出力されます。<br>
         「コピーする」ボタンを押下すると右の欄に出力された結果をコピーできます。
     </div>
     <div class="container">
@@ -81,7 +73,6 @@
             </div>
             <button id="extractButton">抽出する</button>
             <button id="copyButton">コピーする</button>
-            <button id="clearButton" class="clear-button">クリア</button>
         </div>
         <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
     </div>
@@ -110,6 +101,19 @@
             
             random.shuffle(unique_lines)       # ランダムにシャッフル
             output_lines = unique_lines[:line_count]   # 指定された数の行を抽出
+            Element("outputText").element.value = "\n".join(output_lines)  # 出力
+
+        Element("extractButton").element.onclick = extract_random_lines
+
     </py-script>
+
+    <script>
+        document.getElementById("copyButton").onclick = function() {
+            const outputText = document.getElementById("outputText");
+            outputText.select();
+            document.execCommand("copy");
+            alert("抽出されたテキストがコピーされました！");
+        };
+    </script>
 </body>
 </html>
