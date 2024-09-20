@@ -42,11 +42,11 @@
         }
         .clear-buttons {
             display: flex;
-            justify-content: center; /* ボタンを中央に配置 */
+            justify-content: center;
             margin-top: 10px;
         }
         .clear-buttons button {
-            margin: 0 5px; /* ボタン間の余白 */
+            margin: 0 5px;
         }
         .description {
             text-align: center;
@@ -64,6 +64,16 @@
         .back-link a:hover {
             text-decoration: underline;
         }
+        .input-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .output-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -73,21 +83,24 @@
         「コピーする」ボタンを押下すると右の欄に出力された結果をコピーできます。
     </div>
     <div class="container">
-        <textarea id="inputText" placeholder="ここにテキストを入力してください..."></textarea>
         <div class="button-container">
-            <div class="controls">
-                <label for="lineCount">抽出する行数:</label>
-                <input type="number" id="lineCount" value="20" min="1">
+            <textarea id="inputText" placeholder="ここにテキストを入力してください..."></textarea>
+            <div class="input-buttons">
+                <button id="clearInputButton">入力欄クリア</button>
             </div>
+        </div>
+        <div class="controls">
+            <label for="lineCount">抽出する行数:</label>
+            <input type="number" id="lineCount" value="20" min="1">
             <button id="extractButton">抽出する</button>
             <button id="copyButton">コピーする</button>
         </div>
-        <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
-    </div>
-
-    <div class="clear-buttons">
-        <button id="clearInputButton">入力欄クリア</button>
-        <button id="clearOutputButton">出力欄クリア</button>
+        <div class="button-container">
+            <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
+            <div class="output-buttons">
+                <button id="clearOutputButton">出力欄クリア</button>
+            </div>
+        </div>
     </div>
 
     <div class="back-link">
