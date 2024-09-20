@@ -46,7 +46,7 @@
         <div class="button-container">
             <div class="controls">
                 <label for="lineCount">抽出する行数:</label>
-                <input type="number" id="lineCount" value="10" min="1">
+                <input type="number" id="lineCount" value="15" min="1">
             </div>
             <button id="extractButton">抽出する</button>
             <button id="copyButton">コピーする</button>
@@ -66,7 +66,7 @@
             try:
                 line_count = int(Element("lineCount").value)
             except ValueError:
-                line_count = 10  # デフォルトは10行
+                line_count = 15  # デフォルトは15行
             
             # 行数が範囲外の場合は調整
             line_count = min(line_count, len(unique_lines))
