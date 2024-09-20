@@ -12,7 +12,7 @@
         }
         .container {
             display: flex;
-            height: calc(100% - 220px);
+            height: calc(100% - 240px);
             align-items: stretch;
         }
         textarea {
@@ -64,6 +64,11 @@
         .back-link a:hover {
             text-decoration: underline;
         }
+        /* 追加された行数表示用のスタイル */
+        .line-count {
+            text-align: center;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -82,10 +87,12 @@
             </div>
             <button id="extractButton">抽出する</button>
             <button id="copyButton">コピーする</button>
-            <button id="clearButton">クリア</button> <!-- クリアボタン -->
+            <button id="clearButton">クリア</button>
         </div>
         <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
     </div>
+
+    <div class="line-count" id="lineCountDisplay">入力された行数: 0 行</div>
 
     <div class="back-link">
         <a href="index.html">メインページに戻る</a>
@@ -113,6 +120,14 @@
     </py-script>
 
     <script>
+        function updateLineCount() {
+            const inputText = document.getElementById("inputText").value;
+            const lines = inputText.split(/\r\n|\r|\n/).filter(line => line.trim() !== "");
+            document.getElementById("lineCountDisplay").innerText = `入力された行数: ${lines.length} 行`;
+        }
+
+        document.getElementById("inputText").addEventListener("input", updateLineCount);
+
         document.getElementById("copyButton").onclick = function() {
             const outputText = document.getElementById("outputText");
             outputText.select();
@@ -123,7 +138,9 @@
         document.getElementById("clearButton").onclick = function() {
             document.getElementById("inputText").value = "";
             document.getElementById("outputText").value = "";
+            updateLineCount();  // クリア時にも行数をリセット
         };
+
         function allowDrop(event) {
             event.preventDefault(); // ドロップを許可
         }
@@ -136,6 +153,7 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById("inputText").value = e.target.result; // ファイルの内容をテキストエリアにセット
+                    updateLineCount();  // ファイル読み込み後にも行数を更新
                 };
                 reader.readAsText(file); // テキストとしてファイルを読み込む
             }
