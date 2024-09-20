@@ -12,7 +12,7 @@
         }
         .container {
             display: flex;
-            height: calc(100% - 200px);
+            height: calc(100% - 240px);
             align-items: stretch;
         }
         textarea {
@@ -35,16 +35,18 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
             margin: 0 10px;
         }
         .button-container button {
-            margin: 5px 0;
         }
         #extractButton, #copyButton {
-            width: 100px; /* 幅を100pxに */
+            width: 100px;
+            margin: 5px 0;
         }
         #clearButton {
-            width: 80px; /* 幅を80pxに */
+            width: 80px;
+            margin: 40px 0;
         }
         .description {
             text-align: center;
@@ -65,11 +67,12 @@
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">テキストランダム抽出器</h1>
+    <h1 style="text-align: center;">テキストランダム抽出くん</h1>
     <div class="description">
-        左側の入力欄に入力されたリストから空白行を削除して「抽出する行数」分のリストが右の欄に出力されます。<br>
-        「コピーする」ボタンを押下すると右の欄に出力された結果をコピーできます。<br>
-        テキストファイルを入力欄にドロップすることもできます。
+        左側の入力欄に入力されたリストから空白行を削除して「抽出する行数」分のリストが右の欄にランダムで出力されます。<br>
+        入力欄側に重複した行がある場合は１つに纏められてから抽出されます。<br>
+        テキストファイルを入力欄に直接ドロップすることもできます。<br>
+        「コピーする」ボタンを押下すると右の欄に出力された結果をコピーできます。
     </div>
     <div class="container">
         <textarea id="inputText" placeholder="ここにテキストを入力してください..." ondrop="drop(event)" ondragover="allowDrop(event)"></textarea>
@@ -80,13 +83,13 @@
             </div>
             <button id="extractButton">抽出する</button>
             <button id="copyButton">コピーする</button>
-            <button id="clearButton">クリア</button>
+            <button id="clearButton">クリア</button> <!-- クリアボタン -->
         </div>
         <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
     </div>
 
     <div class="back-link">
-        <a href="index.html">indexに戻る</a>
+        <a href="index.html">メインページに戻る</a>
     </div>
 
     <py-script>
@@ -104,8 +107,7 @@
             
             line_count = min(line_count, len(unique_lines))
             
-            random.shuffle(unique_lines)
-            output_lines = unique_lines[:line_count]
+            output_lines = random.sample(unique_lines, line_count) 
             Element("outputText").element.value = "\n".join(output_lines)
 
         Element("extractButton").element.onclick = extract_random_lines
@@ -123,7 +125,6 @@
             document.getElementById("inputText").value = "";
             document.getElementById("outputText").value = "";
         };
-
         function allowDrop(event) {
             event.preventDefault(); // ドロップを許可
         }
