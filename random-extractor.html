@@ -38,7 +38,14 @@
             margin: 0 10px;
         }
         .button-container button {
+        }
+        #extractButton, #copyButton {
+            width: 100px;
             margin: 5px 0;
+        }
+        #clearButton {
+            width: 80px;
+            margin: 40px 0;
         }
         .description {
             text-align: center;
@@ -73,7 +80,7 @@
             </div>
             <button id="extractButton">抽出する</button>
             <button id="copyButton">コピーする</button>
-            <button id="clearButton">クリア</button>
+            <button id="clearButton">クリア</button> <!-- クリアボタン -->
         </div>
         <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
     </div>
@@ -105,7 +112,6 @@
     </py-script>
 
     <script>
-        // テキストコピー
         document.getElementById("copyButton").onclick = function() {
             const outputText = document.getElementById("outputText");
             outputText.select();
@@ -113,7 +119,6 @@
             alert("抽出されたテキストがコピーされました！");
         };
 
-        // クリアボタン
         document.getElementById("clearButton").onclick = function() {
             document.getElementById("inputText").value = "";
             document.getElementById("outputText").value = "";
