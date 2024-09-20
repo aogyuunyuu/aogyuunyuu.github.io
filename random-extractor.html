@@ -41,8 +41,8 @@
             margin: 5px 0;
         }
         .clear-button {
-            margin-top: 20px;
-            align-self: center;
+            margin-top: 40px; /* クリアボタンをさらに下に配置 */
+            align-self: center; /* 中央に配置 */
         }
         .description {
             text-align: center;
@@ -106,26 +106,3 @@
             
             random.shuffle(unique_lines)       # ランダムにシャッフル
             output_lines = unique_lines[:line_count]   # 指定された数の行を抽出
-            Element("outputText").element.value = "\n".join(output_lines)  # 出力
-
-        Element("extractButton").element.onclick = extract_random_lines
-
-        # クリアボタンの機能
-        def clear_all(event):
-            Element("inputText").element.value = ""
-            Element("outputText").element.value = ""
-
-        Element("clearButton").element.onclick = clear_all
-
-    </py-script>
-
-    <script>
-        document.getElementById("copyButton").onclick = function() {
-            const outputText = document.getElementById("outputText");
-            outputText.select();
-            document.execCommand("copy");
-            alert("抽出されたテキストがコピーされました！");
-        };
-    </script>
-</body>
-</html>
