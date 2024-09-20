@@ -31,21 +31,19 @@
 
         def extract_random_lines(event):
             input_text = Element("inputText").value
-            lines = input_text.splitlines()  # 改行で分割
-            unique_lines = list(set(lines))   # 重複を排除
+            lines = input_text.splitlines() 
+            unique_lines = list(set(lines)) 
             
-            # 抽出する行数を取得
             try:
                 line_count = int(Element("lineCount").value)
             except ValueError:
                 line_count = 10  # デフォルトは10行
             
-            # 行数が範囲外の場合は調整
             line_count = min(line_count, len(unique_lines))
             
-            random.shuffle(unique_lines)       # ランダムにシャッフル
-            output_lines = unique_lines[:line_count]   # 指定された数の行を抽出
-            Element("outputText").element.value = "\n".join(output_lines)  # 出力
+            random.shuffle(unique_lines)
+            output_lines = unique_lines[:line_count]
+            Element("outputText").element.value = "\n".join(output_lines)
 
         Element("extractButton").element.onclick = extract_random_lines
     </py-script>
