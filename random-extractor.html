@@ -73,6 +73,7 @@
             </div>
             <button id="extractButton">抽出する</button>
             <button id="copyButton">コピーする</button>
+            <button id="clearButton">クリア</button>
         </div>
         <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
     </div>
@@ -87,32 +88,35 @@
         def extract_random_lines(event):
             input_text = Element("inputText").value
             lines = input_text.splitlines()  # 改行で分割
-            # 空白行を無視して重複を排除
             unique_lines = list(set(line for line in lines if line.strip()))  
             
-            # 抽出する行数を取得
             try:
                 line_count = int(Element("lineCount").value)
             except ValueError:
                 line_count = 20
             
-            # 行数が範囲外の場合は調整
             line_count = min(line_count, len(unique_lines))
             
-            random.shuffle(unique_lines)       # ランダムにシャッフル
-            output_lines = unique_lines[:line_count]   # 指定された数の行を抽出
-            Element("outputText").element.value = "\n".join(output_lines)  # 出力
+            random.shuffle(unique_lines)
+            output_lines = unique_lines[:line_count]
+            Element("outputText").element.value = "\n".join(output_lines)
 
         Element("extractButton").element.onclick = extract_random_lines
-
     </py-script>
 
     <script>
+        // テキストコピー
         document.getElementById("copyButton").onclick = function() {
             const outputText = document.getElementById("outputText");
             outputText.select();
             document.execCommand("copy");
             alert("抽出されたテキストがコピーされました！");
+        };
+
+        // クリアボタン
+        document.getElementById("clearButton").onclick = function() {
+            document.getElementById("inputText").value = "";
+            document.getElementById("outputText").value = "";
         };
     </script>
 </body>
