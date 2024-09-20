@@ -63,7 +63,8 @@
         def extract_random_lines(event):
             input_text = Element("inputText").value
             lines = input_text.splitlines()  # 改行で分割
-            unique_lines = list(set(lines))   # 重複を排除
+            # 空白行を無視して重複を排除
+            unique_lines = list(set(line for line in lines if line.strip()))  
             
             # 抽出する行数を取得
             try:
