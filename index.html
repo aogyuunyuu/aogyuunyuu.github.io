@@ -12,6 +12,9 @@
     <button class="py-button" type="submit" py-click="leven()">Go</button>
     <textarea rows="30" cols="30" id="text2"> </textarea>
     <div id="output"></div>
+      <span>
+        <button id="copy-button" onclick="copyToClipboard()" class="underline decoration-blue-500 hover:decoration-2 hover:decoration-blue-600"></button>
+      </span>
     
     <py-script>
       from levenshtein_distance import Levenshtein
@@ -22,9 +25,6 @@
           lev = Levenshtein(text1, text2)
           display(f"レーベンシュタイン距離: {lev.distance()}", target="output", append=False)
     </py-script>
-      <span>
-        <button id="copy-button" onclick="copyToClipboard()" class="underline decoration-blue-500 hover:decoration-2 hover:decoration-blue-600"></button>
-      </span>
         <script>
       const copyToClipboard = () => {
         const range = document.createRange();
