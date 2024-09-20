@@ -8,10 +8,11 @@
     <py-config>
       packages = ["levenshtein-distance"]
     </py-config>
-    <textarea rows="10" cols="30" id="text1"> </textarea>
-    <textarea rows="10" cols="30" id="text2"> </textarea>
+    <textarea rows="30" cols="30" id="text1"> </textarea>
     <button class="py-button" type="submit" py-click="leven()">Go</button>
+    <textarea rows="30" cols="30" id="text2"> </textarea>
     <div id="output"></div>
+    
     <py-script>
       from levenshtein_distance import Levenshtein
 
@@ -21,5 +22,21 @@
           lev = Levenshtein(text1, text2)
           display(f"レーベンシュタイン距離: {lev.distance()}", target="output", append=False)
     </py-script>
+      <span>
+        <button id="copy-button" onclick="copyToClipboard()" class="underline decoration-blue-500 hover:decoration-2 hover:decoration-blue-600"></button>
+      </span>
+        <script>
+      const copyToClipboard = () => {
+        const range = document.createRange();
+        range.selectNode(document.getElementById("text2"));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        document.getElementById('copy-button').innerText = "Copied!";
+        setTimeout(() => {
+          document.getElementById('copy-button').innerText = "Copy to Clipboard";
+        }, 3000);
+      }
+    </script>
   </body>
 </html>
