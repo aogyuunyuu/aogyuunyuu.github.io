@@ -74,7 +74,7 @@
 <body>
     <h1 style="text-align: center;">テキストランダム抽出くん</h1>
     <div class="description">
-        左側の入力欄に入力されたリストから重複行と空白行が削除され「抽出する行数」分のリストが右の欄にランダムで出力されます。<br>
+        左側の入力欄に入力されたリストから重複行と空白行が削除され「抽出行数」分のリストが右の欄にランダムで出力されます。<br>
         テキストファイルを入力欄に直接ドロップすることもできます。<br>
         「コピーする」ボタンを押下すると右の欄に出力された結果をコピーできます。
     </div>
@@ -82,7 +82,7 @@
         <textarea id="inputText" placeholder="ここにテキストを入力してください..." ondrop="drop(event)" ondragover="allowDrop(event)"></textarea>
         <div class="button-container">
             <div class="controls">
-                <label for="lineCount">抽出する行数:</label>
+                <label for="lineCount">抽出行数:</label>
                 <input type="number" id="lineCount" value="20" min="1">
             </div>
             <button id="extractButton">抽出する</button>
