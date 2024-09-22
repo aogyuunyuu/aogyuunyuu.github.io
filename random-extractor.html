@@ -132,16 +132,18 @@
                 li.textContent = line
                 output_list.appendChild(li)
 
-            # Sortable.jsを再初期化
-            new Sortable(output_list.element, {
-                animation: 150,
-                ghostClass: 'sortable-ghost',
-            })
-
         Element("extractButton").element.onclick = extract_random_lines
     </py-script>
 
     <script>
+        // Sortable.jsの初期化関数
+        function initializeSortable() {
+            new Sortable(document.getElementById("outputList"), {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+            });
+        }
+
         function updateLineCount() {
             const inputText = document.getElementById("inputText").value;
             const lines = inputText.split(/\r\n|\r|\n/).filter(line => line.trim() !== "");
@@ -178,6 +180,7 @@
                 document.getElementById("inputText").value = savedText;
                 updateLineCount();  // 読み込み後に行数を更新
             }
+            initializeSortable(); // Sortableを初期化
         };
 
         function allowDrop(event) {
