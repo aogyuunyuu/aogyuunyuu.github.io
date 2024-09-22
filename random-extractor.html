@@ -97,7 +97,7 @@
             <button id="extractButton">抽出する</button>
             <button id="copyButton">コピーする</button>
             <button id="clearButton">クリア</button>
-            <button id="saveButton">入力状態を保存</button>
+            <button id="saveButton">保存する</button>
         </div>
         <ul id="outputList" placeholder="抽出されたテキストがここに表示されます..."></ul>
     </div>
@@ -125,11 +125,18 @@
             
             output_lines = random.sample(unique_lines, line_count) 
             output_list = Element("outputList")
+            output_list.element.innerHTML = ""  # リストをクリア
             
             for line in output_lines:
                 li = document.createElement("li")
                 li.textContent = line
                 output_list.appendChild(li)
+
+            # Sortable.jsを再初期化
+            new Sortable(output_list.element, {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+            })
 
         Element("extractButton").element.onclick = extract_random_lines
     </py-script>
@@ -190,12 +197,6 @@
                 reader.readAsText(file); // テキストとしてファイルを読み込む
             }
         }
-
-        // Sortable.jsを初期化
-        new Sortable(document.getElementById("outputList"), {
-            animation: 150,
-            ghostClass: 'sortable-ghost',
-        });
     </script>
 </body>
 </html>
