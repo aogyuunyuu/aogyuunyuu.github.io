@@ -28,6 +28,16 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 // クッキーからデータを取得する関数
+function getCooki// クッキーにデータを保存する関数
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toUTCString();
+    // クッキーに保存する際にURIエンコードを行う
+    document.cookie = cname + "=" + encodeURIComponent(cvalue) + ";" + expires + ";path=/";
+}
+
+// クッキーからデータを取得する関数
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -38,7 +48,8 @@ function getCookie(cname) {
             c = c.substring(1);
         }
         if (c.indexOf(name) === 0) {
-            return c.substring(name.length, c.length);
+            // 取得時にデコードを行う
+            return decodeURIComponent(c.substring(name.length, c.length));
         }
     }
     return "";
