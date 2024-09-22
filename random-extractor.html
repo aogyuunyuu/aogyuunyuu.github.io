@@ -38,8 +38,6 @@
             align-items: center;
             margin: 0 10px;
         }
-        .button-container button {
-        }
         #extractButton, #copyButton {
             width: 100px;
             margin: 5px 0;
@@ -74,7 +72,7 @@
 <body>
     <h1 style="text-align: center;">テキストランダム抽出くん</h1>
     <div class="description">
-        左側の入力欄に入力されたリストから重複行と空白行が削除され「抽出行数」分のリストが右の欄にランダムで出力されます。<br>
+        左側の入力欄に入力されたリストから重複行と空白行が削除され「抽出する行数」分のリストが右の欄にランダムで出力されます。<br>
         テキストファイルを入力欄に直接ドロップすることもできます。<br>
         「コピーする」ボタンを押下すると右の欄に出力された結果をコピーできます。
     </div>
@@ -82,12 +80,13 @@
         <textarea id="inputText" placeholder="ここにテキストを入力してください..." ondrop="drop(event)" ondragover="allowDrop(event)"></textarea>
         <div class="button-container">
             <div class="controls">
-                <label for="lineCount">抽出行数:</label>
+                <label for="lineCount">抽出する行数:</label>
                 <input type="number" id="lineCount" value="20" min="1">
             </div>
             <button id="extractButton">抽出する</button>
             <button id="copyButton">コピーする</button>
             <button id="clearButton">クリア</button>
+            <button id="saveButton">保存する</button>
         </div>
         <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
     </div>
@@ -139,6 +138,22 @@
             document.getElementById("inputText").value = "";
             document.getElementById("outputText").value = "";
             updateLineCount();  // クリア時にも行数をリセット
+        };
+
+        // テキストエリアの内容をローカルストレージに保存する
+        document.getElementById("saveButton").onclick = function() {
+            const inputText = document.getElementById("inputText").value;
+            localStorage.setItem("savedText", inputText);
+            alert("テキストが保存されました！");
+        };
+
+        // ページ読み込み時にローカルストレージからデータを読み込む
+        window.onload = function() {
+            const savedText = localStorage.getItem("savedText");
+            if (savedText) {
+                document.getElementById("inputText").value = savedText;
+                updateLineCount();  // 読み込み後に行数を更新
+            }
         };
 
         function allowDrop(event) {
