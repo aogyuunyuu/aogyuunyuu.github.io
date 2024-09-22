@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random Extractor</title>
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <style>
         body, html {
             height: 100%;
@@ -67,6 +68,16 @@
             margin: 0px 2.5% 10px;
             padding-left: 10px;
         }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 8px;
+            border: 1px solid #ccc;
+            margin: 5px 0;
+            cursor: move;
+        }
     </style>
 </head>
 <body>
@@ -88,7 +99,7 @@
             <button id="clearButton">クリア</button>
             <button id="saveButton">入力状態を保存</button>
         </div>
-        <textarea id="outputText" placeholder="抽出されたテキストがここに表示されます..." readonly></textarea>
+        <ul id="outputList" placeholder="抽出されたテキストがここに表示されます..."></ul>
     </div>
 
     <div class="line-count" id="lineCountDisplay">入力された行数: 0 行</div>
@@ -113,7 +124,13 @@
             line_count = min(line_count, len(unique_lines))
             
             output_lines = random.sample(unique_lines, line_count) 
-            Element("outputText").element.value = "\n".join(output_lines)
+            output_list = Element("outputList")
+            output_list.element.innerHTML = ""  # リストをクリア
+            
+            for line in output_lines:
+                li = document.createElement("li")
+                li.textContent = line
+                output_list.appendChild(li)
 
         Element("extractButton").element.onclick = extract_random_lines
     </py-script>
@@ -128,15 +145,16 @@
         document.getElementById("inputText").addEventListener("input", updateLineCount);
 
         document.getElementById("copyButton").onclick = function() {
-            const outputText = document.getElementById("outputText");
-            outputText.select();
-            document.execCommand("copy");
-            alert("抽出されたテキストがコピーされました！");
+            const outputListItems = Array.from(document.querySelectorAll("#outputList li"));
+            const outputText = outputListItems.map(item => item.textContent).join("\n");
+            navigator.clipboard.writeText(outputText).then(() => {
+                alert("抽出されたテキストがコピーされました！");
+            });
         };
 
         document.getElementById("clearButton").onclick = function() {
             document.getElementById("inputText").value = "";
-            document.getElementById("outputText").value = "";
+            document.getElementById("outputList").innerHTML = "";
             updateLineCount();  // クリア時にも行数をリセット
         };
 
@@ -173,6 +191,12 @@
                 reader.readAsText(file); // テキストとしてファイルを読み込む
             }
         }
+
+        // Sortable.jsを初期化
+        new Sortable(document.getElementById("outputList"), {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+        });
     </script>
 </body>
 </html>
