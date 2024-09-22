@@ -123,26 +123,39 @@
             
             line_count = min(line_count, len(unique_lines))
             
-            output_lines = random.sample(unique_lines, line_count) 
-            output_list = Element("outputList")
-            output_list.element.innerHTML = ""  # リストをクリア
+            output_lines = random.sample(unique_lines, line_count)
             
-            for line in output_lines:
-                li = document.createElement("li")
-                li.textContent = line
-                output_list.appendChild(li)
+            return output_lines  # JavaScriptに返す
 
         Element("extractButton").element.onclick = extract_random_lines
     </py-script>
 
     <script>
-        // Sortable.jsの初期化関数
         function initializeSortable() {
             new Sortable(document.getElementById("outputList"), {
                 animation: 150,
                 ghostClass: 'sortable-ghost',
             });
         }
+
+        // Pythonから返されたリストを受け取り、HTMLに追加
+        function updateOutputList(outputLines) {
+            const outputList = document.getElementById("outputList");
+            outputList.innerHTML = "";  // リストをクリア
+            
+            outputLines.forEach(line => {
+                const li = document.createElement("li");
+                li.textContent = line;
+                outputList.appendChild(li);
+            });
+        }
+
+        document.getElementById("extractButton").onclick = async function() {
+            const outputLines = await pyodide.runPythonAsync(`
+                extract_random_lines(None)
+            `);
+            updateOutputList(outputLines);
+        };
 
         function updateLineCount() {
             const inputText = document.getElementById("inputText").value;
