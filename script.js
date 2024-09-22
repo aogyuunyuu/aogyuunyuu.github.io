@@ -24,15 +24,6 @@ function setCookie(cname, cvalue, exdays) {
     const d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-// クッキーからデータを取得する関数
-function getCooki// クッキーにデータを保存する関数
-function setCookie(cname, cvalue, exdays) {
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-    let expires = "expires=" + d.toUTCString();
     // クッキーに保存する際にURIエンコードを行う
     document.cookie = cname + "=" + encodeURIComponent(cvalue) + ";" + expires + ";path=/";
 }
@@ -70,6 +61,7 @@ window.onload = function() {
         updateLineCount(); // 行数も更新
     }
 };
+
 
 function allowDrop(event) {
     event.preventDefault(); // ドロップを許可
