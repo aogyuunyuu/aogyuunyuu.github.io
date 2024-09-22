@@ -111,38 +111,24 @@
     <py-script>
         import random
 
-        def extract_random_lines(event):
+        def extract_random_lines():
             input_text = Element("inputText").value
-            lines = input_text.splitlines()  # 改行で分割
-            unique_lines = list(set(line for line in lines if line.strip()))  
-            
-            try:
-                line_count = int(Element("lineCount").value)
-            except ValueError:
-                line_count = 20
-            
+            lines = input_text.splitlines()
+            unique_lines = list(set(line for line in lines if line.strip()))
+
+            line_count = int(Element("lineCount").value) if Element("lineCount").value.isdigit() else 20
             line_count = min(line_count, len(unique_lines))
             
             output_lines = random.sample(unique_lines, line_count)
-            
-            return output_lines  # JavaScriptに返す
-
-        Element("extractButton").element.onclick = extract_random_lines
+            return output_lines
     </py-script>
 
     <script>
-        function initializeSortable() {
-            new Sortable(document.getElementById("outputList"), {
-                animation: 150,
-                ghostClass: 'sortable-ghost',
-            });
-        }
-
-        // Pythonから返されたリストを受け取り、HTMLに追加
-        function updateOutputList(outputLines) {
+        // 抽出結果を表示するJavaScript関数
+        function displayExtractedLines(outputLines) {
             const outputList = document.getElementById("outputList");
-            outputList.innerHTML = "";  // リストをクリア
-            
+            outputList.innerHTML = ""; // リストをクリア
+
             outputLines.forEach(line => {
                 const li = document.createElement("li");
                 li.textContent = line;
@@ -150,20 +136,20 @@
             });
         }
 
-        document.getElementById("extractButton").onclick = async function() {
-            const outputLines = await pyodide.runPythonAsync(`
-                extract_random_lines(None)
-            `);
-            updateOutputList(outputLines);
-        };
+        document.getElementById("extractButton").addEventListener("click", function() {
+            // PyScriptでPython関数を呼び出す
+            pyodide.runPythonAsync('extract_random_lines()').then(outputLines => {
+                displayExtractedLines(outputLines);
+            });
+        });
 
-        function updateLineCount() {
-            const inputText = document.getElementById("inputText").value;
-            const lines = inputText.split(/\r\n|\r|\n/).filter(line => line.trim() !== "");
-            document.getElementById("lineCountDisplay").innerText = `入力された行数: ${lines.length} 行`;
+        // Sortable.jsの初期化
+        function initializeSortable() {
+            new Sortable(document.getElementById("outputList"), {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+            });
         }
-
-        document.getElementById("inputText").addEventListener("input", updateLineCount);
 
         document.getElementById("copyButton").onclick = function() {
             const outputListItems = Array.from(document.querySelectorAll("#outputList li"));
@@ -176,43 +162,49 @@
         document.getElementById("clearButton").onclick = function() {
             document.getElementById("inputText").value = "";
             document.getElementById("outputList").innerHTML = "";
-            updateLineCount();  // クリア時にも行数をリセット
+            updateLineCount();
         };
 
-        // テキストエリアの内容をローカルストレージに保存する
         document.getElementById("saveButton").onclick = function() {
             const inputText = document.getElementById("inputText").value;
             localStorage.setItem("savedText", inputText);
             alert("テキストが保存されました！");
         };
 
-        // ページ読み込み時にローカルストレージからデータを読み込む
         window.onload = function() {
             const savedText = localStorage.getItem("savedText");
             if (savedText) {
                 document.getElementById("inputText").value = savedText;
-                updateLineCount();  // 読み込み後に行数を更新
+                updateLineCount();
             }
-            initializeSortable(); // Sortableを初期化
+            initializeSortable();
         };
 
         function allowDrop(event) {
-            event.preventDefault(); // ドロップを許可
+            event.preventDefault();
         }
 
         function drop(event) {
-            event.preventDefault(); // デフォルトの動作をキャンセル
+            event.preventDefault();
             const files = event.dataTransfer.files;
             if (files.length > 0) {
                 const file = files[0];
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById("inputText").value = e.target.result; // ファイルの内容をテキストエリアにセット
-                    updateLineCount();  // ファイル読み込み後にも行数を更新
+                    document.getElementById("inputText").value = e.target.result;
+                    updateLineCount();
                 };
-                reader.readAsText(file); // テキストとしてファイルを読み込む
+                reader.readAsText(file);
             }
         }
+
+        function updateLineCount() {
+            const inputText = document.getElementById("inputText").value;
+            const lines = inputText.split(/\r\n|\r|\n/).filter(line => line.trim() !== "");
+            document.getElementById("lineCountDisplay").innerText = `入力された行数: ${lines.length} 行`;
+        }
+
+        document.getElementById("inputText").addEventListener("input", updateLineCount);
     </script>
 </body>
 </html>
